@@ -4,7 +4,8 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "EzHomeLab",
   description: "A guide to setting up a basic homelab.",
-  themeConfig: {  
+  appearance: "force-dark",
+  themeConfig: {
     sidebar: [
       {
         // text: 'Examples',
