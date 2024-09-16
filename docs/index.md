@@ -5,21 +5,9 @@ layout: home
 hero:
   name: "EzHomeLab"
   text: "A guide to setting up a basic homelab."
-  tagline: My great project tagline
+  tagline: "With OpenWRT as base OS"
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
-    - theme: alt
-      text: API Examples
-      link: /api-examples
-
-features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+      text: Getting Started
+      link: /getting-started
 ---
-
