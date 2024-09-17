@@ -83,7 +83,7 @@ Leave the password as blank and login to `OpenWRT` via web interface, which is c
 
 ### Optional
 
-I also disabled `DHCPv6` in my `OpenWRT` as I haven't seens any real benefit of `IPv6` in my lan. This of course may change in the future.
+This is optional but I also disabled `DHCPv6` in my `OpenWRT` as I haven't seens any real benefit of `IPv6` in my lan. This of course may change in the future.
 - Disable `RA-Service`, `DHCPv6-Service`, `NDP-Proxy` and `Designated Master` in:
 ```
 Network > Interfaces > Edit lan interface > DHCP Server > IPv6 Settings
