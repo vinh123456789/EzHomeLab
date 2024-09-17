@@ -5,7 +5,7 @@ layout: home
 hero:
   name: "EzHomeLab"
   text: "A guide to setting up a basic homelab."
-  tagline: "With OpenWRT as base OS"
+  tagline: "With OpenWRT as OS"
   actions:
     - theme: brand
       text: Getting Started
