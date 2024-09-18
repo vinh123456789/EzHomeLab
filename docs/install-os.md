@@ -12,10 +12,10 @@ You can select the same options as me, the `Storage` option obviously will be yo
 ![Raspberry Pi Imager options](./assets/install-os/1.png)
 
 Click `EDIT SETTINGS` when promted.
-![Raspberry Pi Imager options](./assets/install-os/2.png)
+![Raspberry Pi Imager - edit setting](./assets/install-os/2.png)
 
 The next window should be straightforward, I only remind you to enable `SSH` in `Service` tab as this is required for what we're aming to. When you enable this setting, it will ask you set up the username and password as well so let do that.
-![Raspberry Pi Imager options](./assets/install-os/3.png)
+![Raspberry Pi Imager - enable SSH](./assets/install-os/3.png)
 
 Click `Save` and then `Yes` to proceed with flash. After it completed, plug your USB into Raspi to boot the `Raspberry Pi OS`.
 
@@ -79,22 +79,13 @@ sudo nano /media/admin/rootfs/etc/config/network
 
 Leave the password as blank and login to `OpenWRT` via web interface, which is called `LuCI`. Don't forget to change the default password in `System > Router Password` and enable `SSH` in `System > SSH Access`.
 
----
+### Disable DHCPv6
 
-### Optional
+I also disabled `DHCPv6` in my `OpenWRT` as I haven't seens any real benefit of `IPv6` in my lan and I can see many people having problems with it on the internet. This of course may change in the future.
+- Disable `RA-Service`, `DHCPv6-Service`, `NDP-Proxy` and `Designated Master` in `Network > Interfaces > Edit lan interface > DHCP Server > IPv6 Settings`
 
-I also disabled `DHCPv6` in my `OpenWRT` as I haven't seens any real benefit of `IPv6` in my lan. This of course may change in the future.
-- Disable `RA-Service`, `DHCPv6-Service`, `NDP-Proxy` and `Designated Master` in:
-```
-Network > Interfaces > Edit lan interface > DHCP Server > IPv6 Settings
-```
-- Disable `IPv6 assignment length` in:
-```
-Network > Interfaces > Edit lan interface > Advanced Settings
-```
+- Disable `IPv6 assignment length` in `Network > Interfaces > Edit lan interface > Advanced Settings`
+
 [Reference](https://forum.openwrt.org/t/disable-ipv6-in-openwrt-lan-and-wan/199365/5)
 
-For some cases, you will also need to disable the `DHCPv6` in your internet router as well. Since I'm using `Viettel` router, I simply access my router and disable it in:
-```
-Administration > IPv6 Switch
-```
+For some cases, you will also need to disable the `DHCPv6` in your internet router as well. Since I'm using `Viettel` router, I simply access my router and disable it in `Administration > IPv6 Switch`.

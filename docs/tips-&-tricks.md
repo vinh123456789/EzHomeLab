@@ -1,3 +1,7 @@
+---
+aside: false
+---
+
 # Tips & Tricks
 
 To shutdown the `Raspberry Pi OS` you can double press the power button or use the following command:

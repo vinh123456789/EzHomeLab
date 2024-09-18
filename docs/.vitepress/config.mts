@@ -12,11 +12,23 @@ export default defineConfig({
         items: [
           { text: 'Getting Started', link: '/getting-started' },
           { text: 'Install OS', link: '/install-os' },
+          { text: 'AdGuard Home', link: '/adguard-home' },
           { text: 'Tips & Tricks', link: '/tips-&-tricks' },
           { text: 'Markdown Examples', link: '/markdown-examples' },
           { text: 'Runtime API Examples', link: '/api-examples' }
         ]
-      }
+      },
     ],
+    search: {
+      provider: 'local'
+    },
+    outline: 'deep',
+    // aside: false,
+    // outline: 2,
+    externalLinkIcon: true,
+    footer: {
+      message: 'Made with passion',
+      copyright: 'Contributed by myself'
+    }
   }
 })

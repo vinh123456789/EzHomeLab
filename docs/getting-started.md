@@ -1,3 +1,7 @@
+---
+aside: false
+---
+
 # Getting Started
 
 This guide is based on Raspberry Pi 5 8GB RAM with a 256GB SSD M.2 NVME PCie.
