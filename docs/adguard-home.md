@@ -58,7 +58,7 @@ uci commit dhcp
 
 Go to `192.168.1.4:3000` to begin setup the AdGuard Home, you can also change your port here, in my case, I changed it to `8080`. Just remember to set the DNS server to `192.168.1.4` port `53`.
 
-#### Allowed your router connect to the internet
+### Allowed your router connect to the internet
 
 After completed the above steps, your router won't be able to connect to the internet. You would need to edit the AdGuard Home `.yaml` file:
 ```sh
@@ -79,4 +79,4 @@ service adguardhome stop
 service adguardhome start
 ```
 
-#### AdGuard Home configuration
+### AdGuard Home configuration
