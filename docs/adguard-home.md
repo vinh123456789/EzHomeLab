@@ -80,3 +80,26 @@ service adguardhome start
 ```
 
 ### AdGuard Home configuration
+
+
+### Force all DNS traffic goes through AdGuard Home
+```yaml
+config redirect
+	option dest 'lan'
+	option target 'DNAT'
+	option src 'lan'
+	option src_dport '53'
+	option name 'AdGuardHome DNS Interception'
+	option src_ip '!192.168.1.1'
+	option dest_ip '192.168.1.1'
+	option dest_port '53'
+
+config nat
+	option name 'Prevent hardcoded DNS'
+	list proto 'tcp'
+	list proto 'udp'
+	option src 'lan'
+	option dest_ip '192.168.1.1'
+	option dest_port '53'
+	option target 'MASQUERADE'
+```
