@@ -39,4 +39,4 @@ You can setup scheduling tasks with cron job in OpenWRT via `System > Scheduled 
 * 5 * * 1 sleep 70 && touch /etc/banner && reboot
 ```
 
-[Reference](https://openwrt.org/docs/guide-user/base-system/cron#periodic_reboot)
+[Reference](https://openwrt.org/docs/guide-user/base-system/cron#periodic_reboot).

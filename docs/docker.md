@@ -1,3 +1,7 @@
+---
+aside: false
+---
+
 # Docker
 
 As Docker already installed in OpenWRT, you can find it easily in `LuCI` menu or if you perfer command, simply `SSH` into OpenWRT.
@@ -33,3 +37,5 @@ networks:
     name: dockerlannetwork
     external: true
 ```
+
+Reference at [here](https://forum.openwrt.org/t/openwrt-with-docker-docker-compose-network/150228/4) and [here](https://forum.openwrt.org/t/how-to-configure-custom-docker-compose-network/197070/5).

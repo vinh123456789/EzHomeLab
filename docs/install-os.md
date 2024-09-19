@@ -93,6 +93,6 @@ I also disabled `DHCPv6` in my OpenWRT as I haven't seens any real benefit of `I
 
 - Disable `IPv6 assignment length` in `Network > Interfaces > Edit lan interface > Advanced Settings`
 
-[Reference](https://forum.openwrt.org/t/disable-ipv6-in-openwrt-lan-and-wan/199365/5)
+[Reference](https://forum.openwrt.org/t/disable-ipv6-in-openwrt-lan-and-wan/199365/5).
 
 For some cases, you will also need to disable the `DHCPv6` in your internet router as well. Since I'm using `Viettel` router, I simply access my router and disable it in `Administration > IPv6 Switch`.
