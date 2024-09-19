@@ -1,7 +1,5 @@
 # AdGuard
 
-## Introduction
-
 To put it simple, AdGuard Home will act as a DNS resovler and help us block the majority of the ads on internet, it can also encrypt your DNS requests via DoT and DoH, resulting in bypass your ISP policy in most case.
 
 This is a simplified guide based on the official [OpenWRT AdGuard Home guide](https://openwrt.org/docs/guide-user/services/dns/adguard-home) and [this helpful post in OpenWRT forum](https://forum.openwrt.org/t/how-to-updated-2021-installing-adguardhome-on-openwrt-manual-and-opkg-method/113904/685)
@@ -20,8 +18,12 @@ service adguardhome enable
 service adguardhome start
 ```
 
-By default, the `LAN` interface will use `br-lan` as it device which is not needed in our case, I would suggest you use change it to `eth0` via `LuCI`.
+Edit the interfaces via `Network > Interfaces`, click `Edit` in the `lan` interface.
 ![OpenWRT interface](./assets/adguard-home/1.png)
+
+By default, the `LAN` interface will use `br-lan` as it device which is not needed in our case, I would suggest you change it to `eth0`.
+
+![OpenWRT edit lan](./assets/adguard-home/2.png)
 
 Run the following command via `SSH` which I copied from OpenWRT AdGuard Home guide with some edits.
 ```sh
@@ -56,7 +58,7 @@ uci commit dhcp
 
 ## Setup AdGuard Home
 
-Go to `192.168.1.4:3000` to begin setup the AdGuard Home, you can also change your port here, in my case, I changed it to `8080`. Just remember to set the DNS server to `192.168.1.4` port `53`. If you changed your web port like me, after save the settings, you have to access AdGuard Home via `192.168.1.4:8080`.
+Go to `192.168.1.4:3000` to begin setup the AdGuard Home, you can also change your web port here, such as `8080`. Just remember to set the DNS server to `192.168.1.4` port `53`. If you changed your web port like me, after save the settings, you have to access AdGuard Home via `192.168.1.4:8080`.
 
 ### Allowed your router connect to the internet
 
@@ -71,7 +73,7 @@ nano /etc/adguardhome.yaml
 ```
 
 Add your router IP into `bind_hosts`:
-```sh
+```yml
 dns:
   bind_hosts:
   - 127.0.0.1
@@ -85,7 +87,12 @@ service adguardhome start
 
 ### AdGuard Home configuration
 
-In the AdGuard Home page, go to `Settings > DNS settings`. In the `Upstream DNS servers` setting text box, paste the following:
+#### General settings
+
+You can set logs rotation duration here, but the longer the duration, the more memory it consume as AdGuard Home use RAM for log, same with OpenWRT.
+
+#### DNS settings
+In the `Upstream DNS servers` setting text box, paste the following:
 ```
 # We're using DoH encrytion DNS server
 https://dns.google/dns-query
@@ -102,16 +109,18 @@ https://dns.quad9.net/dns-query
 ```
 
 Explaination on why we use the above setting:
-- Why we use DoH?
+- Why use DoH?
 	- Since plain DNS use port `53`, your ISP can easily redirect all packets to that port to their DNS server and read your requests.
 	- DoT (DNS over TLS) use port `853` which your ISP can also easily block access to it and make your devices swith back to plain DNS.
 	- DoH (DNS over HTTPS) use port `443` which is the same with every other `HTTPS` request, this make the blocking of it much harder. The cons of this protocol is the processing time will be longer (but still fast from of human perspective).
 	- An impotant note to remember is that although you can avoid the blocking from your ISP DNS server, you ISP can still block connection to any IP they want.
 - Given encrypted DNS relies heavily on certificates, having accurate time is more important. To prevent this, we allow NTP DNS requests to use plain DNS, regardless of the upstream DNS resolvers set.
 
-You could enter some popular DNS servers such as `1.1.1.1` and `8.8.8.8` into `Fallback DNS servers` box to allow your devices continues to access internet in case AdGuard Home failed but I'm leaving it empty.
+In the next setting, select `Parallel requests`.
 
-When AdGuard Home start-up, it won't know what are the IP address of inputed servers in `Upstream DNS servers`, the IPs in `Bootstrap DNS servers` will help to resolved these domains:
+You could enter some popular DNS servers such as `1.1.1.1` and `8.8.8.8` into `Fallback DNS servers` box to allow your devices continues to access internet in case AdGuard Home failed but I'm leaving it as empty.
+
+When AdGuard Home start-up, it won't know what are the IP address of the upstream servers, `Bootstrap DNS servers` will help to resolved that:
 ```
 1.1.1.1
 1.0.0.1
@@ -130,16 +139,51 @@ Check both `Use private reverse DNS resolvers` and `Enable reverse resolving of 
 
 Click `Test upstreams` to see if it works and `Apply` if it is positive.
 
-### Force all DNS traffic goes through AdGuard Home
-```yaml
+#### DNS blocklists
+
+You can either add the AdGuard Home recommend blocklists or add the following:
+```
+DOH Bypass - Encrypted DNS Servers
+https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/doh.txt
+
+Multi PRO++ - Maximum protection
+https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.plus.txt
+
+Threat Intelligence Feeds - Medium version
+https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.medium.txt
+```
+
+They are all part of [Hagezi blocklists](https://github.com/hagezi/dns-blocklists) and they are doing a very good job.
+
+#### DNS blocklists
+
+As AdGuard Home blocked some services by default, you can disable them here.
+
+## Force all DNS traffic goes through AdGuard Home
+
+As some devices will bypass our DNS servers, create the following rules in OpenWRT firewall via `Network > Firewall`:
+
+- In `Port Forwards`:
+![Port Forwards rule](./assets/adguard-home/3.png)
+![Port Forwards rule](./assets/adguard-home/4.png)
+
+- In `NAT Rules`:
+![NAT rule](./assets/adguard-home/5.png)
+
+Alternative, you can also do this via `SSH` with (not recommend for beginner):
+```sh
+nano /etc/config/firewall
+```
+
+```ssh-config
 config redirect
 	option dest 'lan'
 	option target 'DNAT'
 	option src 'lan'
 	option src_dport '53'
 	option name 'AdGuardHome DNS Interception'
-	option src_ip '!192.168.1.1'
-	option dest_ip '192.168.1.1'
+	option src_ip '!192.168.1.4'
+	option dest_ip '192.168.1.4'
 	option dest_port '53'
 
 config nat
@@ -147,7 +191,26 @@ config nat
 	list proto 'tcp'
 	list proto 'udp'
 	option src 'lan'
-	option dest_ip '192.168.1.1'
+	option dest_ip '192.168.1.4'
 	option dest_port '53'
 	option target 'MASQUERADE'
 ```
+
+## Optional
+
+If you have a habit to manage your network devices like me, you can set their static leases in OpenWRT `LuCI` via `Network > DHCP and DNS > Static Leases`.
+
+You can also do it via `SSH`:
+```sh
+nano /etc/config/dhcp
+```
+
+I recommend you use `SFPT` to edit and backup the `dhcp` file as I find it easier to do so.
+
+Install `SFPT` in OpenWRT:
+```sh
+opkg update
+opkg install openssh-sftp-server
+```
+
+You are now able to connect to OpenWRT with `SFPT` client such as [WinSCP](https://winscp.net/eng/download.php).

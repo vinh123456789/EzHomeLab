@@ -2,7 +2,7 @@
 
 Why do I need a secondary OS, you asked? There are 2 reasons why I need it:
 - To flash the primary OS into my SSD.
-- Edit the configs in my primary OS.
+- To edit the configs in my primary OS.
 
 There are many tool to flash an OS into your devices, but in my case, I will use Raspberry Pi Imager which can be download via the following [link](https://www.raspberrypi.com/software/).
 
@@ -23,7 +23,7 @@ Check your Raspi's IP in your router and `SSH` into it. I also recommend you ena
 ```sh
 sudo raspi-config
 ```
-Go to `Interface > VNC` and then select `Yes` when promted. You now can connect to Raspi with a VNC client such as `TigerVNC`.
+Go to `Interface > VNC` and then select `Yes` when promted. You now can connect to Raspi with a VNC client such as [TigerVNC](https://github.com/TigerVNC/tigervnc/releases).
 
 The next step is assign a static IP for it as we are intending to use it as a router. I will also give my primary OS the same IP later as it is easier to remember althought this is not required. You can do this either via GUI after connected via VNC or edit `dhcpcd` file with the following command:
 ```sh
@@ -66,14 +66,21 @@ The next few steps are quite hassle:
 ```sh
 lsblk
 ```
-- Noted down your SSD ID and then mount it with the following command, `nvme0n1p2` is my SSD ID:
+- Noted down your SSD ID and then mount it with the following command - `nvme0n1p2` is my SSD ID:
 ```sh
 mount nvme0n1p2
 ```
-- Change the OpenWRT static IP with:
+- Change the OpenWRT static IP by edit `ipaddr` in `network`:
 ```sh
 sudo nano /media/admin/rootfs/etc/config/network
 ```
+```ssh-config
+config interface 'lan'
+        option device 'br-lan'
+        option proto 'static'
+        option ipaddr '192.168.1.4'
+```
+
 - Finally, shutdown the Raspi by the same shutdown command above and plug out your USB.
 - Bootup your Raspi again. Wait for a few minutes and access OpenWRT via your web brower using the same static IP you set above.
 
