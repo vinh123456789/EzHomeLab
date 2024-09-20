@@ -16,7 +16,7 @@ perl ~/exiftool/exiftool yourfile
 ```
 - But typing all of that every time is quite troublesome, we can do better by create `.profile` file and add an alias to it:
 ```sh
-nano .profile
+nano .bash_aliases
 ```
 ```
 alias exiftool="perl ~/exiftool/exiftool"
@@ -82,3 +82,14 @@ To remove the backup file, use:
 ```sh
 rm *.jpeg_original
 ```
+
+---
+
+To rename files based on it exif data, you can try the following command:
+```sh
+exiftool '-FileName<CreateDate' -d %Y%m%d_%H%M%S%%+c.%%e .
+```
+- `CreateDate` is the tag you want to base on.
+- `%Y%m%d_%H%M%S` will write your file name based on date and time with a specific format.
+- `%%` is using to escape character `%` in date format string, so `%+c` will add a copy number with leading '_' if the file name already exists.
+- `.%e` is the file extension.
