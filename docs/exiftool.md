@@ -1,3 +1,7 @@
+<script setup>
+const date = new Date();
+</script>
+
 # ExifTool
 
 [ExifTool](https://exiftool.org/) is command-line application for reading, writing and editing metadata, it supports a wide variety of files.
@@ -90,6 +94,6 @@ To rename files based on it exif data, you can try the following command:
 exiftool '-FileName<CreateDate' -d %Y%m%d_%H%M%S%%+c.%%e .
 ```
 - `CreateDate` is the tag you want to base on.
-- `%Y%m%d_%H%M%S` will write your file name based on date and time with a specific format.
+- `%Y%m%d_%H%M%S` will write your file name based on date and time with a specific format, e.g: {{ date.getUTCFullYear() + ("0" + (date.getMonth() + 1)).slice(-2) + ("0" + date.getDate()).slice(-2) + '_' + ("0" + date.getHours()).slice(-2) + ("0" + date.getMinutes()).slice(-2) + ("0" + date.getSeconds()).slice(-2) }}.
 - `%%` is using to escape character `%` in date format string, so `%+c` will add a copy number with leading '_' if the file name already exists.
 - `.%e` is the file extension.
