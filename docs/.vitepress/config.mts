@@ -15,6 +15,8 @@ export default defineConfig({
           { text: 'AdGuard Home', link: '/adguard-home' },
           { text: 'Docker', link: '/docker' },
           { text: 'Self Hosted Photo And Video Solution', link: '/self-hosted-photo-and-video-solution' },
+          { text: 'Rclone', link: '/rclone' },
+          { text: 'ExifTool', link: '/exiftool' },
           { text: 'Tips & Tricks', link: '/tips-&-tricks' },
           { text: 'Markdown Examples', link: '/markdown-examples' },
           { text: 'Runtime API Examples', link: '/api-examples' }

@@ -153,9 +153,9 @@ Threat Intelligence Feeds - Medium version
 https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.medium.txt
 ```
 
-They are all part of [Hagezi blocklists](https://github.com/hagezi/dns-blocklists) and they are doing a very good job.
+They are all part of [Hagezi blocklists](https://github.com/hagezi/dns-blocklists) and they are doing a very good job. Please be aware that the bigger the list the heavier load your Raspi will be put under but it not necessary the better.
 
-#### DNS blocklists
+#### Blocked services
 
 As AdGuard Home blocked some services by default, you can disable them here.
 
