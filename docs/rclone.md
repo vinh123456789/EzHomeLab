@@ -31,3 +31,10 @@ rclone sync --interactive --progress Google:"folderA/folderB/folderC" ~/original
 ```sh
 rclone sync --interactive --progress ~/originals Google:"folderA/folderB/folderC"
 ```
+
+By default, after you renamed a file, Rclone won't know if that file was renamed or just created/deleted. This cause Rclone upload that whole file to destination again. To avoid that, you can use:
+```sh
+rclone sync --track-renames --track-renames-strategy hash,size --interactive --progress ~/originals Google:"folderA/folderB/folderC" -v
+```
+- `--track-renames` is the trigger keyword.
+- `--track-renames-strategy hash,size` is the strategy of the renames function, in this case, Rclone will compare our files between source and destination using hash and size.
