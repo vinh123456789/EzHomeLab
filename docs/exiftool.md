@@ -62,7 +62,7 @@ exiftool -EXIF:OffsetTime*="+08:00" yourfile
 
 ---
 
-Another usefull option is the `-if`:
+Another useful option is the `-if`:
 ```sh
 exiftool -ext jpeg -if '$OffsetTimeOriginal eq "+07:00"' . -filename
 ```
