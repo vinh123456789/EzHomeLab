@@ -21,16 +21,11 @@ To allowed it, you have to do the following steps:
 	![docker advanced settings](./assets/docker/5.png)
 - Go to `Network > Firewall > Traffic Rules`, add a new rule:
 ![docker traffic rules](./assets/docker/6.png)
-- At the end of your first container `docker-compose.yml`, add the following network:
-```yml
-networks:
-  default:
-	name: dockerlannetwork
-    external: true # set to true if you want to keep the network when do 'docker compose down'
-    driver_opts:
-      com.docker.network.bridge.name: docker1
+- Create the following network:
+```sh
+docker network create -o "com.docker.network.bridge.name"="docker1" dockerlannetwork
 ```
-- Add this to the end of subsequent containers `docker-compose.yml`:
+- At the end of your `docker-compose.yml`, add the following network:
 ```yml
 networks:
   default:
