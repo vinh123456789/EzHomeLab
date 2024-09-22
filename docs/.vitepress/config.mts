@@ -14,7 +14,12 @@ export default defineConfig({
           { text: 'Install OS', link: '/install-os' },
           { text: 'AdGuard Home', link: '/adguard-home' },
           { text: 'Docker', link: '/docker' },
-          { text: 'Self Hosted Photo And Video Solution', link: '/self-hosted-photo-and-video-solution' },
+          {
+            items:
+              [
+                { text: 'Self Hosted Photo And Video Solution', link: '/self-hosted-photo-and-video-solution' }
+              ]
+          },
           { text: 'Rclone', link: '/rclone' },
           { text: 'ExifTool', link: '/exiftool' },
           { text: 'Tips & Tricks', link: '/tips-&-tricks' },
