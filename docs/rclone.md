@@ -11,30 +11,31 @@ Since OpenWRT already have a ready-to-use package for Rclone, you can simply ins
 opkg update
 opkg install rclone
 ```
-After the installation, go to [here](https://rclone.org/docs/) for guide to config Rclone.
 
-In the begining, I use `rclone mount` to mount the Google Drive folder to `~/originals` but for some reasons, the installed multimedia manage apps can't scan/see those file although they are still listed in my `SSH` when I use `ls`. I guess this is because the mounted files not ready stored in my storage untill I actually read it.
+After the installation, go [here](https://rclone.org/docs/) for a guide to configure Rclone.
 
-After a bit research, I resolved to `rclone sync` instead. The command is quite simple:
+In the beginning, I used `rclone mount` to mount the Google Drive folder to `~/originals`, but for some reason, the installed multimedia management apps couldn’t scan/see those files although they were still listed in my `SSH` when I used `ls`. I guess this is because the mounted files are not really stored in my storage until I actually read them.
+
+After a bit of research, I switched to `rclone sync` instead. The command is quite simple:
 ```sh
 rclone sync --interactive --progress SOURCE remote:DESTINATION
 ```
-- --interactive: Rclone will ask for your input when it encoureted change.
-- --progress: Rclone will show it progress.
+- --interactive: Rclone will ask for your input when it encounters changes.
+- --progress: Rclone will show its progress.
 
 So in my case, I use it like this:
-- To sync file from Google Drive to my local:
+- To sync files from Google Drive to my local:
 ```sh
 rclone sync --interactive --progress Google:"folderA/folderB/folderC" ~/originals
 ```
-- To sync file from Google Drive to my local:
+- To sync files from my local to Google Drive:
 ```sh
 rclone sync --interactive --progress ~/originals Google:"folderA/folderB/folderC"
 ```
 
-By default, after you renamed a file, Rclone won't know if that file was renamed or just created/deleted. This cause Rclone upload that whole file to destination again. To avoid that, you can use:
+By default, after you rename a file, Rclone won’t know if that file was renamed or just created/deleted. This causes Rclone to upload the whole file to the destination again. To avoid that, you can use:
 ```sh
 rclone sync --track-renames --track-renames-strategy hash,size --interactive --progress ~/originals Google:"folderA/folderB/folderC" -v
 ```
 - `--track-renames` is the trigger keyword.
-- `--track-renames-strategy hash,size` is the strategy of the renames function, in this case, Rclone will compare our files between source and destination using hash and size.
+- `--track-renames-strategy hash,size` is the strategy of the renames function. In this case, Rclone will compare your files between the source and destination using hash and size.

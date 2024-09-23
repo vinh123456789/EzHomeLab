@@ -22,9 +22,7 @@ export default defineConfig({
           },
           { text: 'Rclone', link: '/rclone' },
           { text: 'ExifTool', link: '/exiftool' },
-          { text: 'Tips & Tricks', link: '/tips-&-tricks' },
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
+          { text: 'Tips & Tricks', link: '/tips-&-tricks' }
         ]
       },
     ],

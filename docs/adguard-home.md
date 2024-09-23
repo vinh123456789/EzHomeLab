@@ -1,6 +1,6 @@
 # AdGuard
 
-To put it simple, AdGuard Home will act as a DNS resovler and help us block the majority of the ads on internet, it can also encrypt your DNS requests via DoT and DoH, resulting in bypass your ISP policy in most case.
+To put it simply, AdGuard Home will act as a DNS resolver and help us block the majority of the ads on the internet. It can also encrypt your DNS requests via DoT and DoH, resulting in bypassing your ISP policy in most cases.
 
 This is a simplified guide based on the official [OpenWRT AdGuard Home guide](https://openwrt.org/docs/guide-user/services/dns/adguard-home) and [this helpful post in OpenWRT forum](https://forum.openwrt.org/t/how-to-updated-2021-installing-adguardhome-on-openwrt-manual-and-opkg-method/113904/685)
 
@@ -21,11 +21,10 @@ service adguardhome start
 Edit the interfaces via `Network > Interfaces`, click `Edit` in the `lan` interface.
 ![OpenWRT interface](./assets/adguard-home/1.png)
 
-By default, the `LAN` interface will use `br-lan` as it device which is not needed in our case, I would suggest you change it to `eth0`.
-
+By default, the `LAN` interface will use `br-lan` as its device, which is not needed in our case. I would suggest you change it to `eth0`.
 ![OpenWRT edit lan](./assets/adguard-home/2.png)
 
-Run the following command via `SSH` which I copied from OpenWRT AdGuard Home guide with some edits.
+Run the following command via `SSH`, which I copied from the OpenWRT AdGuard Home guide with some edits.
 ```sh
 NET_ADDR=$(/sbin/ip -o -4 addr list eth0 | awk 'NR==1{ split($4, ip_addr, "/"); print ip_addr[1] }')
 
@@ -58,11 +57,11 @@ uci commit dhcp
 
 ## Setup AdGuard Home
 
-Go to `192.168.1.4:3000` to begin setup the AdGuard Home, you can also change your web port here, such as `8080`. Just remember to set the DNS server to `192.168.1.4` port `53`. If you changed your web port like me, after save the settings, you have to access AdGuard Home via `192.168.1.4:8080`.
+Go to `192.168.1.4:3000` to begin setting up AdGuard Home. You can also change your web port here, such as to `8080`. Just remember to set the DNS server to `192.168.1.4` port `53`. If you changed your web port like me, after saving the settings, you have to access AdGuard Home via `192.168.1.4:8080`.
 
 ### Allowed your router connect to the internet
 
-After completed the above steps, your router won't be able to connect to the internet. You would need to stop the `adguardhome` service:
+After completing the above steps, your router won't be able to connect to the internet. You would need to stop the `adguardhome` service:
 ```sh
 service adguardhome stop
 ```
@@ -89,7 +88,7 @@ service adguardhome start
 
 #### General settings
 
-You can set logs rotation duration here, but the longer the duration, the more memory it consume as AdGuard Home use RAM for log, same with OpenWRT.
+You can set the log rotation duration here, but the longer the duration, the more memory it consumes as AdGuard Home uses RAM for logs, same with OpenWRT.
 
 #### DNS settings
 In the `Upstream DNS servers` setting text box, paste the following:
@@ -110,17 +109,17 @@ https://dns.quad9.net/dns-query
 
 Explaination on why we use the above setting:
 - Why use DoH?
-	- Since plain DNS use port `53`, your ISP can easily redirect all packets to that port to their DNS server and read your requests.
-	- DoT (DNS over TLS) use port `853` which your ISP can also easily block access to it and make your devices swith back to plain DNS.
-	- DoH (DNS over HTTPS) use port `443` which is the same with every other `HTTPS` request, this make the blocking of it much harder. The cons of this protocol is the processing time will be longer (but still fast from of human perspective).
-	- An impotant note to remember is that although you can avoid the blocking from your ISP DNS server, you ISP can still block connection to any IP they want.
+	- Since plain DNS uses port `53`, your ISP can easily redirect all packets to that port to their DNS server and read your requests.
+	- DoT (DNS over TLS) uses port `853`, which your ISP can also easily block access to and make your devices switch back to plain DNS.
+	- DoH (DNS over HTTPS) uses port `443`, which is the same as every other `HTTPS` request, making blocking it much harder. The downside of this protocol is the processing time will be longer (but still fast from a human perspective).
+	- An important note to remember is that although you can avoid blocking from your ISP DNS server, your ISP can still block connection to any IP they want.
 - Given encrypted DNS relies heavily on certificates, having accurate time is more important. To prevent this, we allow NTP DNS requests to use plain DNS, regardless of the upstream DNS resolvers set.
 
 In the next setting, select `Parallel requests`.
 
-You could enter some popular DNS servers such as `1.1.1.1` and `8.8.8.8` into `Fallback DNS servers` box to allow your devices continues to access internet in case AdGuard Home failed but I'm leaving it as empty.
+You could enter some popular DNS servers such as `1.1.1.1` and `8.8.8.8` into `Fallback DNS servers` box to allow your devices to continue to access the internet in case AdGuard Home fails, but I'm leaving it empty.
 
-When AdGuard Home start-up, it won't know what are the IP address of the upstream servers, `Bootstrap DNS servers` will help to resolved that:
+When AdGuard Home starts up, it won't know what the IP addresses of the upstream servers are. `Bootstrap DNS servers` will help to resolve that:
 ```
 1.1.1.1
 1.0.0.1
@@ -141,7 +140,7 @@ Click `Test upstreams` to see if it works and `Apply` if it is positive.
 
 #### DNS blocklists
 
-You can either add the AdGuard Home recommend blocklists or add the following:
+You can either add the AdGuard Home recommended blocklists or add the following:
 ```
 DOH Bypass - Encrypted DNS Servers
 https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/doh.txt
@@ -153,15 +152,15 @@ Threat Intelligence Feeds - Medium version
 https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.medium.txt
 ```
 
-They are all part of [Hagezi blocklists](https://github.com/hagezi/dns-blocklists) and they are doing a very good job. Please be aware that the bigger the list the heavier load your Raspi will be put under but it not necessary the better.
+They are all part of [Hagezi blocklists](https://github.com/hagezi/dns-blocklists) and they are doing a very good job. Please be aware that the bigger the list, the heavier the load your Raspi will be put under, but it is not necessarily better.
 
 #### Blocked services
 
-As AdGuard Home blocked some services by default, you can disable them here.
+As AdGuard Home blocks some services by default, you can disable them here.
 
 ## Force all DNS traffic goes through AdGuard Home
 
-As some devices will bypass our DNS servers, create the following rules in OpenWRT firewall via `Network > Firewall`:
+As some devices will bypass our DNS servers, create the following rules in the OpenWRT firewall via `Network > Firewall`:
 
 - In `Port Forwards`:
 ![Port Forwards rule](./assets/adguard-home/3.png)
@@ -170,7 +169,7 @@ As some devices will bypass our DNS servers, create the following rules in OpenW
 - In `NAT Rules`:
 ![NAT rule](./assets/adguard-home/5.png)
 
-Alternative, you can also do this via `SSH` with (not recommend for beginner):
+Alternative, you can also do this via `SSH` (not recommended for beginner):
 ```sh
 nano /etc/config/firewall
 ```
@@ -198,7 +197,7 @@ config nat
 
 ## Optional
 
-If you have a habit to manage your network devices like me, you can set their static leases in OpenWRT `LuCI` via `Network > DHCP and DNS > Static Leases`.
+If you have a habit of managing your network devices like me, you can set their static leases in OpenWRT `LuCI` via `Network > DHCP and DNS > Static Leases`.
 
 You can also do it via `SSH`:
 ```sh
@@ -213,4 +212,4 @@ opkg update
 opkg install openssh-sftp-server
 ```
 
-You are now able to connect to OpenWRT with `SFPT` client such as [WinSCP](https://winscp.net/eng/download.php).
+You are now able to connect to OpenWRT with an `SFPT` client such as [WinSCP](https://winscp.net/eng/download.php).
