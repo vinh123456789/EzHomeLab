@@ -86,6 +86,12 @@ config interface 'lan'
 
 Leave the password blank and log in to OpenWRT via the web interface, which is called `LuCI`. Don't forget to change the default password in `System > Router Password` and enable `SSH` in `System > SSH Access`.
 
+### Set Gateway and DNS
+
+If your OpenWRT devices is behind ISP router like me, you need to set gateway IP and DNS to allowed your devices access internet.
+
+You can do this by go to `Network > Interfaces`, click `Edit` in the `lan`.
+
 ### Disable DHCPv6
 
 I also disabled `DHCPv6` in my OpenWRT as I haven't seen any real benefit of `IPv6` in my LAN and I can see many people having problems with it on the internet. This, of course, may change in the future.
