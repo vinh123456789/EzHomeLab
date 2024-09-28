@@ -58,6 +58,7 @@ uci commit dhcp
 ## Setup AdGuard Home
 
 Go to `192.168.1.4:3000` to begin setting up AdGuard Home. You can also change your web port here, such as to `8080`. Just remember to set the DNS server to `192.168.1.4` port `53`. If you changed your web port like me, after saving the settings, you have to access AdGuard Home via `192.168.1.4:8080`.
+![Adguard Home setup](./assets/adguard-home/6.png)
 
 ### Allowed your router connect to the internet
 
@@ -154,10 +155,6 @@ https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.medium.
 
 They are all part of [Hagezi blocklists](https://github.com/hagezi/dns-blocklists) and they are doing a very good job. Please be aware that the bigger the list, the heavier the load your Raspi will be put under, but it is not necessarily better.
 
-#### Blocked services
-
-As AdGuard Home blocks some services by default, you can disable them here.
-
 ## Force all DNS traffic goes through AdGuard Home
 
 As some devices will bypass our DNS servers, create the following rules in the OpenWRT firewall via `Network > Firewall`:
@@ -213,3 +210,8 @@ opkg install openssh-sftp-server
 ```
 
 You are now able to connect to OpenWRT with an `SFPT` client such as [WinSCP](https://winscp.net/eng/download.php).
+
+Restart `dnsmasq` after save your config:
+```sh
+service dnsmasq restart
+```

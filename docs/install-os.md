@@ -88,7 +88,7 @@ Leave the password blank and log in to OpenWRT via the web interface, which is c
 
 ### Set Gateway and DNS
 
-If your OpenWRT devices is behind ISP router like me, you need to set gateway IP and DNS to allowed your devices access internet.
+If your OpenWRT devices is behind ISP router like me, you need to set gateway IP and DNS (you can remove DNS after Adguard Home was setup) to allowed your devices access internet.
 
 You can do this by go to `Network > Interfaces`, click `Edit` in the `lan`.
 
