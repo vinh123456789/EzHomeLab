@@ -60,6 +60,8 @@ uci commit dhcp
 Go to `192.168.1.4:3000` to begin setting up AdGuard Home. You can also change your web port here, such as to `8080`. Just remember to set the DNS server to `192.168.1.4` port `53`. If you changed your web port like me, after saving the settings, you have to access AdGuard Home via `192.168.1.4:8080`.
 ![Adguard Home setup](./assets/adguard-home/6.png)
 
+---
+
 ### Allowed your router connect to the internet
 
 After completing the above steps, your router won't be able to connect to the internet. You would need to stop the `adguardhome` service:
@@ -85,13 +87,17 @@ And start the `adguardhome` service afterward:
 service adguardhome start
 ```
 
-### AdGuard Home configuration
+---
 
-#### General settings
+## AdGuard Home configuration
+
+### General settings
 
 You can set the log rotation duration here, but the longer the duration, the more memory it consumes as AdGuard Home uses RAM for logs, same with OpenWRT.
 
-#### DNS settings
+---
+
+### DNS settings
 In the `Upstream DNS servers` setting text box, paste the following:
 ```
 # We're using DoH encrytion DNS server
@@ -139,7 +145,9 @@ Check both `Use private reverse DNS resolvers` and `Enable reverse resolving of 
 
 Click `Test upstreams` to see if it works and `Apply` if it is positive.
 
-#### DNS blocklists
+---
+
+### DNS blocklists
 
 You can either add the AdGuard Home recommended blocklists or add the following:
 ```
@@ -190,28 +198,4 @@ config nat
 	option dest_ip '192.168.1.4'
 	option dest_port '53'
 	option target 'MASQUERADE'
-```
-
-## Optional
-
-If you have a habit of managing your network devices like me, you can set their static leases in OpenWRT `LuCI` via `Network > DHCP and DNS > Static Leases`.
-
-You can also do it via `SSH`:
-```sh
-nano /etc/config/dhcp
-```
-
-I recommend you use `SFPT` to edit and backup the `dhcp` file as I find it easier to do so.
-
-Install `SFPT` in OpenWRT:
-```sh
-opkg update
-opkg install openssh-sftp-server
-```
-
-You are now able to connect to OpenWRT with an `SFPT` client such as [WinSCP](https://winscp.net/eng/download.php).
-
-Restart `dnsmasq` after save your config:
-```sh
-service dnsmasq restart
 ```

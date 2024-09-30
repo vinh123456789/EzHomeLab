@@ -86,11 +86,15 @@ config interface 'lan'
 
 Leave the password blank and log in to OpenWRT via the web interface, which is called `LuCI`. Don't forget to change the default password in `System > Router Password` and enable `SSH` in `System > SSH Access`.
 
+---
+
 ### Set Gateway and DNS
 
-If your OpenWRT devices is behind ISP router like me, you need to set gateway IP and DNS (you can remove DNS after Adguard Home was setup) to allowed your devices access internet.
+If your OpenWRT device is behind an ISP router like mine, you need to set the gateway IP and DNS (you can remove the DNS after AdGuard Home is set up) to allow your device to access the internet.
 
 You can do this by go to `Network > Interfaces`, click `Edit` in the `lan`.
+
+---
 
 ### Disable DHCPv6
 
@@ -102,3 +106,31 @@ I also disabled `DHCPv6` in my OpenWRT as I haven't seen any real benefit of `IP
 [Reference](https://forum.openwrt.org/t/disable-ipv6-in-openwrt-lan-and-wan/199365/5).
 
 In some cases, you will also need to disable `DHCPv6` in your internet router as well. Since I'm using a `Viettel` router, I simply access my router and disable it in `Administration > IPv6 Switch`.
+
+---
+
+### Optional
+
+#### Set Static Leases
+
+If you have a habit of managing your network devices like me, you can set their static leases in OpenWRT `LuCI` via `Network > DHCP and DNS > Static Leases`.
+
+You can also do it via `SSH`:
+```sh
+nano /etc/config/dhcp
+```
+
+I recommend you use `SFPT` to edit and backup the `dhcp` file as I find it easier to do so.
+
+Install `SFPT` in OpenWRT:
+```sh
+opkg update
+opkg install openssh-sftp-server
+```
+
+You are now able to connect to OpenWRT with an `SFPT` client such as [WinSCP](https://winscp.net/eng/download.php).
+
+Restart `dnsmasq` after save your config:
+```sh
+service dnsmasq restart
+```
