@@ -5,6 +5,7 @@ export default defineConfig({
   title: "EzHomeLab",
   description: "A guide to setting up a basic homelab.",
   appearance: "force-dark",
+  base: "/EzHomeLab/",
   themeConfig: {
     sidebar: [
       {
