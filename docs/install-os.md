@@ -58,9 +58,25 @@ When the flash is finished, shutdown your Raspi via:
 sudo shutdown -h now
 ```
 
+Then unplug your USB.
+
+---
+
+### Set static IP address
+
+After completing the above steps, you need to set a static IP address for your OpenWRT Raspberry Pi/router. As mentioned earlier, our static IP address in OpenWRT will be the same as our Raspberry Pi OS, which is `192.168.1.4`. To do this, follow one of the options below:
+
+#### Option 1
+
+Since OpenWRT sets its IP address to `192.168.1.1` by default, you need to unplug the Ethernet cable between your modem and the rest of your network. Then, access `192.168.1.1` via your browser and change the OpenWRT IP address to `192.168.1.4` through `Network > Interfaces > Edit lan interface`. Save and apply your settings, and then plug in the Ethernet cable to reconnect your modem.
+
+#### Option 2
+
+If, for whatever reason, you can’t disconnect the connection from your modem, you can follow this option, but it is quite a hassle:
+
 The next few steps are quite a hassle:
-- Unplug your USB and boot up the Raspi again.
-- Wait for a few minutes to allow OpenWRT to initialize system files and then force a hard shutdown by pressing and holding the physical power button or simply disconnecting the power plug.
+- Boot up the Raspi again.
+- Wait for 1 - 2 minutes to allow OpenWRT to initialize system files and then force a hard shutdown by pressing and holding the physical power button or simply disconnecting the power plug.
 - Plug in the USB with the Raspberry Pi OS into it again and boot up the Raspi.
 - `SSH` into it again and list out the connected devices:
 ```sh
@@ -99,9 +115,8 @@ You can do this by go to `Network > Interfaces`, click `Edit` in the `lan`.
 ### Disable DHCPv6
 
 I also disabled `DHCPv6` in my OpenWRT as I haven't seen any real benefit of `IPv6` in my LAN and I can see many people having problems with it on the internet. This, of course, may change in the future.
-- Disable `RA-Service`, `DHCPv6-Service`, `NDP-Proxy` and `Designated Master` in `Network > Interfaces > Edit lan interface > DHCP Server > IPv6 Settings`
-
-- Disable `IPv6 assignment length` in `Network > Interfaces > Edit lan interface > Advanced Settings`
+- In `Network > Interfaces > Edit lan interface > Advanced Settings`: disable `IPv6 assignment length`.
+- In `Network > Interfaces > Edit lan interface > DHCP Server > IPv6 Settings`: disable `RA-Service`, `DHCPv6-Service`, `NDP-Proxy` and `Designated Master` 
 
 [Reference](https://forum.openwrt.org/t/disable-ipv6-in-openwrt-lan-and-wan/199365/5).
 
