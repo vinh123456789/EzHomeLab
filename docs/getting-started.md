@@ -13,3 +13,6 @@ Since I can't think of many cases where I would benefit from owning a reader, I 
 Besides that, I want to connect to my Raspi via the network only, so no additional purchases such as a micro HDMI cable are needed.
 
 Since I already have a USB drive, I will use it as a secondary OS. Therefore, the process to install the primary OS on the SSD will include a few additional steps.
+
+Below is my soon-to-be network topology:
+![Network topology](./assets/getting-started/1.png)
