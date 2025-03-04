@@ -35,7 +35,7 @@ It my case, the static IP address is `192.168.1.4`.
 
 [OpenWRT](https://openwrt.org/) is one of the most famous and actively developed open-source router OS. It has a built-in Docker and a ready-to-use AdGuard package, these are some of the reasons why I chose this OS.
 
-As of now, OpenWRT is only available as a pre-release snapshot for Raspi 5. You can access the `2024.09.12` snapshot via the following [link](https://github.com/mj22226/openwrt/releases/tag/bcm2712-6.6). We will use the `ext4-factory` file in our case.
+As of now, the latest OpenWRT version for Raspi 5 is `24.10.0`. You can download it via the following [link](https://firmware-selector.openwrt.org/) or via `wget` using the guide that follows. We will use the `ext4-factory` file in our case.
 
 The ones with `factory` mean it is for flashing a different OS to OpenWRT, while `sysupgrade` means to replace the current OpenWRT OS with a different version.
 
@@ -47,7 +47,7 @@ As Raspberry Pi OS comes with Raspberry Pi Imager already, we will use it to fla
 
 Download the OpenWRT image with:
 ```sh
-wget https://github.com/mj22226/openwrt/releases/download/bcm2712-6.6/openwrt-bcm27xx-bcm2712-rpi-5-ext4-factory.img.gz
+wget https://downloads.openwrt.org/releases/24.10.0/targets/bcm27xx/bcm2712/openwrt-24.10.0-bcm27xx-bcm2712-rpi-5-ext4-factory.img.gz
 ```
 `VNC` into your Raspi and open Raspberry Pi Imager. Repeat the same steps where you flashed the Raspberry Pi OS, only this time, in the `Operating System` option, scroll to the bottom and click `Use custom` to select your downloaded OpenWRT image and select your SSD in the `Storage` option.
 
@@ -108,7 +108,7 @@ Leave the password blank and log in to OpenWRT via the web interface, which is c
 
 If your OpenWRT device is behind an ISP router like mine, you need to set the gateway IP and DNS (you can remove the DNS after AdGuard Home is set up) to allow your device to access the internet.
 
-You can do this by go to `Network > Interfaces`, click `Edit` in the `lan`.
+You can do this by go to `Network > Interfaces`, click `Edit` in the `lan`. Update `IPv4 gateway` and `Advanced Settings > Use custom DNS servers` accordingly.
 
 ---
 
@@ -116,7 +116,7 @@ You can do this by go to `Network > Interfaces`, click `Edit` in the `lan`.
 
 I also disabled `DHCPv6` in my OpenWRT as I haven't seen any real benefit of `IPv6` in my LAN and I can see many people having problems with it on the internet. This, of course, may change in the future.
 - In `Network > Interfaces > Edit lan interface > Advanced Settings`: disable `IPv6 assignment length`.
-- In `Network > Interfaces > Edit lan interface > DHCP Server > IPv6 Settings`: disable `RA-Service`, `DHCPv6-Service`, `NDP-Proxy` and `Designated Master` 
+- In `Network > Interfaces > Edit lan interface > DHCP Server > IPv6 Settings`: disable `RA-Service`, `DHCPv6-Service`, `NDP-Proxy` and `Designated Master`
 
 [Reference](https://forum.openwrt.org/t/disable-ipv6-in-openwrt-lan-and-wan/199365/5).
 
