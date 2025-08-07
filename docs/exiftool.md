@@ -1,5 +1,8 @@
 <script setup>
 const date = new Date();
+const offsetMs = date.getTimezoneOffset() * 60 * 1000;
+const dateLocal = new Date(date.getTime() - offsetMs);
+const formatedDateString = dateLocal.toISOString().slice(0, 19).replace(/-/g, ":").replace("T", " ");
 </script>
 
 # ExifTool
@@ -37,9 +40,14 @@ The above command already returns the exif data of your file, but it will show t
 exiftool -s yourfile
 ```
 
-Some photo editing apps update the file with an incorrect datetime format such as `2024:06:06 16:07:30 PM`, making the multimedia apps unable to parse it. I was able to fix it by removing the `PM`:
+To sort by tag name and then display the group name for each tag:
 ```sh
-exiftool -ModifyDate="2024:06:06 16:07:30" -DateTimeOriginal="2024:06:06 16:07:30" -CreateDate="2024:06:06 16:07:30" yourfile
+exiftool.exe -s -sort -G yourfile
+```
+
+To update a tag, you simply assign a new value to it. For example, here's how to update the three tags below with the current date and time:
+```sh-vue
+exiftool -ModifyDate="{{ formatedDateString }}" -DateTimeOriginal="{{ formatedDateString }}" -CreateDate="{{ formatedDateString }}" yourfile
 ```
 
 ---
@@ -97,3 +105,9 @@ exiftool '-FileName<CreateDate' -d %Y%m%d_%H%M%S%%+c.%%e .
 - `%Y%m%d_%H%M%S` will write your file name based on date and time with a specific format, e.g: {{ date.getUTCFullYear() + ("0" + (date.getMonth() + 1)).slice(-2) + ("0" + date.getDate()).slice(-2) + '_' + ("0" + date.getHours()).slice(-2) + ("0" + date.getMinutes()).slice(-2) + ("0" + date.getSeconds()).slice(-2) }}.
 - `%%` is used to escape the character `%` in the date format string, so `%+c` will add a copy number with a leading '_' if the file name already exists.
 - `.%e` is the file extension.
+
+For example, to rename `HEIC` and `MOV` files based on their creation date:
+```sh
+exiftool.exe '-FileName<CreateDate' -d %Y%m%d_%H%M%S%%+c.%%e "*.HEIC"
+exiftool.exe '-FileName<CreationDate' -d %Y%m%d_%H%M%S%%+c.%%e "*.MOV"
+```
