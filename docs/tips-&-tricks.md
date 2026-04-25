@@ -7,13 +7,13 @@ To shut down the Raspberry Pi OS, you can double-press the power button or use t
 sudo shutdown -h now
 ```
 
-OpenWRT does not yet support the mentioned double press above. You can’t shut down via `LuCI` either, so your only option is:
+OpenWrt does not yet support the mentioned double press above. You can’t shut down via `LuCI` either, so your only option is:
 ```sh
 poweroff
 ```
 ---
 
-#### OpenWRT Temperature
+#### OpenWrt Temperature
 
 In the past, I encountered a problem where my fan was always running at full speed. Although you can monitor the Raspberry Pi’s temperature in `LuCI`, by using the following commands, I was able to find out the problem.
 ```sh
@@ -34,7 +34,7 @@ When I was dealing with this problem, I noticed the second command returned `0`,
 
 #### Scheduled Tasks
 
-You can set up scheduled tasks with cron jobs in OpenWRT via `System > Scheduled Tasks` in `LuCI`. For example, the script below will restart OpenWRT every Monday at 05:00.
+You can set up scheduled tasks with cron jobs in OpenWrt via `System > Scheduled Tasks` in `LuCI`. For example, the script below will restart OpenWrt every Monday at 05:00.
 ```
 * 5 * * 1 sleep 70 && touch /etc/banner && reboot
 ```

@@ -13,7 +13,7 @@ Since I'm using multiple apps at the same time, I mounted another volume to a fo
 [Install guide](https://immich.app/docs/install/docker-compose).
 
 Notes on the installation:
-- Not sure if this is a Docker bug in OpenWRT, but the `localtime` mount will fail because Docker tries to create a `localtime` folder instead. So we need to remove that volume in the `immich-server`. You can also mount the `original` folder here.
+- Not sure if this is a Docker bug in OpenWrt, but the `localtime` mount will fail because Docker tries to create a `localtime` folder instead. So we need to remove that volume in the `immich-server`. You can also mount the `original` folder here.
 ```yml
   immich-server:
     ...

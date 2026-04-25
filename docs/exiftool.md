@@ -11,11 +11,11 @@ const formatedDateString = dateLocal.toISOString().slice(0, 19).replace(/-/g, ":
 
 ## Installation
 
-To install ExifTool in OpenWRT, head to this [link](https://exiftool.org/install.html#Unix) and follow the first 2 steps. You can extract ExifTool to a folder such as `~/exiftool/`. After that:
+To install ExifTool in OpenWrt, head to this [link](https://exiftool.org/install.html#Unix) and follow the first 2 steps. You can extract ExifTool to a folder such as `~/exiftool/`. After that:
 - Install Perl and related modules with:
 ```sh
-opkg update
-opkg install perlbase-file
+apk update
+apk add perlbase-file
 ```
 - You can now execute exiftool:
 ```sh

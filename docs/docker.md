@@ -4,7 +4,7 @@ aside: false
 
 # Docker
 
-As Docker is already installed in OpenWRT, you can find it easily in the `LuCI` menu or, if you prefer commands, simply `SSH` into OpenWRT.
+As Docker is already installed in OpenWrt, you can find it easily in the `LuCI` menu or, if you prefer commands, simply `SSH` into OpenWrt.
 
 However, if you want containers to connect to each other, it won't work by default.
 

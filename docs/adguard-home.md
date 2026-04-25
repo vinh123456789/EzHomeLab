@@ -2,14 +2,14 @@
 
 To put it simply, AdGuard Home will act as a DNS resolver and help us block the majority of the ads on the internet. It can also encrypt your DNS requests via DoT and DoH, resulting in bypassing your ISP policy in most cases.
 
-This is a simplified guide based on the official [OpenWRT AdGuard Home guide](https://openwrt.org/docs/guide-user/services/dns/adguard-home) and [this helpful post in OpenWRT forum](https://forum.openwrt.org/t/how-to-updated-2021-installing-adguardhome-on-openwrt-manual-and-opkg-method/113904/685)
+This is a simplified guide based on the official [OpenWrt AdGuard Home guide](https://openwrt.org/docs/guide-user/services/dns/adguard-home) and [this helpful post in OpenWrt forum](https://forum.openwrt.org/t/how-to-updated-2021-installing-adguardhome-on-openwrt-manual-and-opkg-method/113904/685)
 
-## Install AdGuard Home in OpenWRT
+## Install AdGuard Home in OpenWrt
 
-SSH into OpenWRT and type the following commands:
+SSH into OpenWrt and type the following commands:
 ```sh
-opkg update
-opkg install adguardhome
+apk update
+apk add adguardhome
 ```
 
 Then restart the service to allowed it auto boot:
@@ -19,12 +19,12 @@ service adguardhome start
 ```
 
 Edit the interfaces via `Network > Interfaces`, click `Edit` in the `lan` interface.
-![OpenWRT interface](./assets/adguard-home/1.png)
+![OpenWrt interface](./assets/adguard-home/1.png)
 
 By default, the `LAN` interface will use `br-lan` as its device, which is not needed in our case. I would suggest you change it to `eth0`.
-![OpenWRT edit lan](./assets/adguard-home/2.png)
+![OpenWrt edit lan](./assets/adguard-home/2.png)
 
-Run the following command via `SSH`, which I copied from the OpenWRT AdGuard Home guide with some edits.
+Run the following command via `SSH`, which I copied from the OpenWrt AdGuard Home guide with some edits.
 ```sh
 NET_ADDR=$(/sbin/ip -o -4 addr list eth0 | awk 'NR==1{ split($4, ip_addr, "/"); print ip_addr[1] }')
 
@@ -93,7 +93,7 @@ service adguardhome start
 
 ### General settings
 
-You can set the log rotation duration here, but the longer the duration, the more memory it consumes as AdGuard Home uses RAM for logs, same with OpenWRT.
+You can set the log rotation duration here, but the longer the duration, the more memory it consumes as AdGuard Home uses RAM for logs, same with OpenWrt.
 
 ---
 
@@ -165,7 +165,7 @@ They are all part of [Hagezi blocklists](https://github.com/hagezi/dns-blocklist
 
 ## Force all DNS traffic goes through AdGuard Home
 
-As some devices will bypass our DNS servers, create the following rules in the OpenWRT firewall via `Network > Firewall`:
+As some devices will bypass our DNS servers, create the following rules in the OpenWrt firewall via `Network > Firewall`:
 
 - In `Port Forwards`:
 ![Port Forwards rule](./assets/adguard-home/3.png)

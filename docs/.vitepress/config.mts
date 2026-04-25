@@ -14,16 +14,17 @@ export default defineConfig({
           { text: 'Getting Started', link: '/getting-started' },
           { text: 'Install OS', link: '/install-os' },
           { text: 'AdGuard Home', link: '/adguard-home' },
-          { text: 'Recommend Packages' },
           {
+            text: 'Recommend Packages',
             items:
               [
                 { text: 'Rclone', link: '/rclone' },
                 { text: 'ExifTool', link: '/exiftool' },
               ]
           },
-          { text: 'Docker', link: '/docker' },
           {
+            text: 'Docker',
+            link: '/docker',
             items:
               [
                 { text: 'Self Hosted Photo And Video Solution', link: '/self-hosted-photo-and-video-solution' }
