@@ -35,9 +35,9 @@ It my case, the static IP address is `192.168.1.4`.
 
 [OpenWRT](https://openwrt.org/) is one of the most famous and actively developed open-source router OS. It has a built-in Docker and a ready-to-use AdGuard package, these are some of the reasons why I chose this OS.
 
-As of now, the latest OpenWRT version for Raspi 5 is `24.10.0`. You can download it via the following [link](https://firmware-selector.openwrt.org/) or via `wget` using the guide that follows. We will use the `ext4-factory` file in our case.
+You can download the firmware using the following [link](https://firmware-selector.openwrt.org/) or via `wget` using the guide that follows. We will use the `ext4-factory` file in our case.
 
-The ones with `factory` mean it is for flashing a different OS to OpenWRT, while `sysupgrade` means to replace the current OpenWRT OS with a different version.
+The ones with `factory` mean it is for flashing the entire OS onto a device, while `sysupgrade` means to replace the current OpenWRT OS with a different version.
 
 As for `ext4` and `squashfs`, they are both popular filesystems on Linux systems.
 - `ext4` is a regular Linux filesystem where you can write and read data from/to it, and you can expand the storage with it.
@@ -45,11 +45,21 @@ As for `ext4` and `squashfs`, they are both popular filesystems on Linux systems
 
 As Raspberry Pi OS comes with Raspberry Pi Imager already, we will use it to flash OpenWRT onto the SSD.
 
-Download the OpenWRT image with:
+Open the link above and select your specific device and OpenWrt version. You can build your own image with pre-installed packages and configs by clicking `Customize installed packages and/or first boot script`.
+
+You can also set a static IP for your OpenWrt device by pasting the following script into the `Script to run on first boot (uci-defaults)` textbox:
 ```sh
-wget https://downloads.openwrt.org/releases/24.10.0/targets/bcm27xx/bcm2712/openwrt-24.10.0-bcm27xx-bcm2712-rpi-5-ext4-factory.img.gz
+uci set network.lan.ipaddr="192.168.1.1/24"
+uci commit network
 ```
-`VNC` into your Raspi and open Raspberry Pi Imager. Repeat the same steps where you flashed the Raspberry Pi OS, only this time, in the `Operating System` option, scroll to the bottom and click `Use custom` to select your downloaded OpenWRT image and select your SSD in the `Storage` option.
+
+Don't forget to click `REQUEST BUILD`.
+
+Once the build is complete, right-click the `FACTORY (EXT4)` button to copy the download link. Then, `VNC` into your Raspi and run the following command:
+```sh
+wget copied-link
+```
+Open the Raspberry Pi Imager and repeat the same steps where you flashed the Raspberry Pi OS, only this time, in the `Operating System` option, scroll to the bottom and click `Use custom` to select your downloaded OpenWRT image and select your SSD in the `Storage` option.
 
 When asked to apply OS customization settings, choose `No`.
 
@@ -63,6 +73,8 @@ Then unplug your USB.
 ---
 
 ### Set static IP address
+
+*(You may skip this step if you already configured a static IP within your custom image)*
 
 After completing the above steps, you need to set a static IP address for your OpenWRT Raspberry Pi/router. As mentioned earlier, our static IP address in OpenWRT will be the same as our Raspberry Pi OS, which is `192.168.1.4`. To do this, follow one of the options below:
 
@@ -126,7 +138,7 @@ In some cases, you will also need to disable `DHCPv6` in your internet router as
 
 ### Optional
 
-#### Set Static Leases
+#### Set Device Static Leases
 
 If you have a habit of managing your network devices like me, you can set their static leases in OpenWRT `LuCI` via `Network > DHCP and DNS > Static Leases`.
 
