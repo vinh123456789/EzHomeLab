@@ -12,7 +12,15 @@ export default defineConfig({
         // text: 'Examples',
         items: [
           { text: 'Getting Started', link: '/getting-started' },
-          { text: 'Install OS', link: '/install-os' },
+          {
+            text: 'Install OS',
+            link: '/install-os',
+            items:
+              [
+                { text: 'Install the Raspberry Pi OS', link: '/install-raspberry-pi-os' },
+                { text: 'Install OpenWrt OS', link: '/install-openwrt-os' }
+              ]
+          },
           { text: 'AdGuard Home', link: '/adguard-home' },
           {
             text: 'Recommend Packages',
