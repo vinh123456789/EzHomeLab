@@ -6,7 +6,7 @@ aside: false
 
 [Rclone](https://rclone.org/) is a command-line program to manage files on cloud storage, I use it to sync the files from my Google Drive to `~/originals` folder I mentioned in the other guide.
 
-Since OpenWrt already have a ready-to-use package for Rclone, you can simply install it with:
+Since OpenWrt already has a ready-to-use package for Rclone, you can simply install it with:
 ```sh
 apk update
 apk add rclone

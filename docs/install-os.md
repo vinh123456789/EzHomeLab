@@ -8,7 +8,7 @@ There are many tools to flash an OS onto your devices, but in my case, I will us
 
 ## Install the Raspberry Pi OS
 
-Run Raspberry Pi Imager and select the same options as me. The `Storage` option will obviously be your USB (or any removable device you want).
+Run Raspberry Pi Imager and select the same options as mine. The `Storage` option will obviously be your USB (or any removable device you want).
 ![Raspberry Pi Imager options](./assets/install-os/1.png)
 
 Click `EDIT SETTINGS` when prompted.
@@ -31,23 +31,72 @@ sudo nano /etc/dhcpcd.conf
 ```
 In my case, the static IP address is `192.168.1.4`.
 
-## Install the OpenWrt
+## Install OpenWrt
 
-[OpenWrt](https://OpenWrt.org/) is one of the most famous and actively developed open-source router operating systems. It is very lightweight, hence suitable for many embedded devices. It also supports many well-known packages, such as Docker and AdGuardHome, these are some of the reasons why I chose this OS.
+[OpenWrt](https://openwrt.org/) is one of the most famous and actively developed open-source router operating systems. It is very lightweight, hence suitable for many embedded devices. It also supports many well-known packages, such as Docker and AdGuardHome, these are some of the reasons why I chose this OS.
 
 There are two main ways to obtain OpenWrt firmware:
-- Build via local Image Builder, the biggest reason for why we should choose this option is the ability to customize `ROOTFS_PARTSIZE`, which by default is around 100mb.
+- Build via local Image Builder, the biggest reason for why we should choose this option is the ability to customize `ROOTFS_PARTSIZE` to allow installing more packages, which by default is around 100MB.
 - Build and download via OpenWrt official site, this is the easiest option.
 
-You can download the firmware using the following [link](https://firmware-selector.OpenWrt.org/) or via `wget` using the guide that follows. We will use the `ext4-factory` file in our case.
-
-The ones with `factory` mean it is for flashing the entire OS onto a device, while `sysupgrade` means to replace the current OpenWrt OS with a different version.
+There are multiple types of OpenWrt image. The ones with `factory` mean it is for flashing the entire OS onto a device, while `sysupgrade` means to replace the current OpenWrt OS with a different version.
 
 As for `ext4` and `squashfs`, they are both popular filesystems on Linux systems.
 - `ext4` is a regular Linux filesystem where you can write and read data from/to it, and you can expand the storage with it.
 - `squashfs` is a read-only compressed filesystem, suitable for embedded devices with small storage. You can easily do a factory restore with this filesystem. If you want to try different configurations and packages, this is the one you need.
 
-As Raspberry Pi OS comes with Raspberry Pi Imager already, we will use it to flash OpenWrt onto the SSD.
+We will use the `ext4-factory` file in our case.
+
+### 1. Build via local Image Builder
+
+In this guide, I will only show you how to do it with Windows WSL and a Debian distribution, as it has been proven to work.
+
+Let's get started with the following command in `PowerShell`:
+```powershell
+wsl.exe --install Debian
+```
+
+After installation successfully and restarting your PC, look for and open the `WSL` command-line interface in your Windows.
+
+Access [OpenWrt Firmware Selector page](https://firmware-selector.openwrt.org/) and search for Raspberry Pi version and click on the folder icon.
+
+![Folder Icon](./assets/install-os/4.png)
+
+Download the `openwrt-imagebuilder-*.tar.zst` file.
+```bash
+wget copied-link
+```
+
+Since `tar` already installed by default, let's install `zstd` as well.
+```bash
+sudo apt update && sudo apt install zstd
+```
+
+After the above steps, you can now follow the official guide via this [link](https://openwrt.org/docs/guide-user/additional-software/imagebuilder). I tried the `Temporary non-invasive solution` and it worked great.
+
+Below is my command to create a custom image:
+```bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin make image ROOTFS_PARTSIZE="1024" FILES="/mnt/d/OpenWrt/openwrtfiles" PACKAGES="apk-mbedtls base-files bcm27xx-gpu-fw bcm27xx-utils ca-bundle dnsmasq dropbear e2fsprogs firewall4 fstools kmod-fs-vfat kmod-nft-offload kmod-nls-cp437 kmod-nls-iso8859-1 kmod-sound-arm-bcm2835 kmod-sound-core kmod-usb-hid libc libgcc libustream-mbedtls logd mkf2fs mtd netifd nftables odhcp6c odhcpd-ipv6only partx-utils ppp ppp-mod-pppoe procd-ujail uci uclient-fetch urandom-seed cypress-firmware-43455-sdio brcmfmac-nvram-43455-sdio kmod-brcmfmac wpad-basic-mbedtls kmod-i2c-bcm2835 kmod-spi-bcm2835 kmod-i2c-brcmstb kmod-i2c-designware-platform kmod-spi-dw-mmio kmod-hwmon-pwmfan kmod-thermal kmod-usb-net-lan78xx kmod-usb-net-rtl8152 kmod-r8169 luci luci-app-attendedsysupgrade"
+```
+
+The custom image created with the above command changes 3 things:
+- Increase `ROOTFS_PARTSIZE` to 1024MB, which allows more packages to be installed. The reason for 1024MB is because the official Image Builder server can only support root size of maximum 1024MB and we will use that server to upgrade our OpenWrt.
+- Add all the folders and files in the provided path to the firmware, so that when OpenWrt is installed, we have our configs ready. The folder structure inside that path has to match exactly the path in OpenWrt, for example, the below script `99_setIPforOS` will be placed inside [UCI defaults](https://openwrt.org/docs/guide-developer/uci-defaults) and sets the OpenWrt IP after the first boot, the script content can be found in the second [section](#_2-build-and-download-via-openwrt-official-site).
+```
+Our folder structure: openwrtfiles > etc > uci-defaults > 99_setIPforOS
+
+OpenWrt root: etc > uci-defaults
+```
+- Install provided packages, instead of the default ones. I simply copied the list from Firmware Selector page for this.
+
+After it builds successfully, the files will be located in `bin`. You can use the following command to copy the file to drive D in Windows:
+```sh
+cp bin/targets/bcm27xx/bcm2712/openwrt-*-ext4-factory.img.gz /mnt/d/OpenWrt/
+```
+
+### 2. Build and download via OpenWrt official site
+
+You can download the firmware by accessing the same firmware selector site [link](https://firmware-selector.openwrt.org/).
 
 Open the link above and select your specific device and OpenWrt version. You can build your own image with pre-installed packages and configs by clicking `Customize installed packages and/or first boot script`.
 
@@ -57,26 +106,19 @@ uci set network.lan.ipaddr="192.168.1.1/24"
 uci commit network
 ```
 
-Don't forget to click `REQUEST BUILD`.
+Don't forget to click `REQUEST BUILD` and download the `FACTORY (EXT4)` file.
 
-Once the build is complete, right-click the `FACTORY (EXT4)` button to copy the download link. Then, `VNC` into your Raspi and run the following command:
-```sh
-wget copied-link
-```
-Open the Raspberry Pi Imager and repeat the same steps where you flashed the Raspberry Pi OS, only this time, in the `Operating System` option, scroll to the bottom and click `Use custom` to select your downloaded OpenWrt image and select your SSD in the `Storage` option.
+### 3. Flash OpenWrt
 
-When asked to apply OS customization settings, choose `No`.
+As Raspberry Pi OS comes with Raspberry Pi Imager already, we will use it to flash OpenWrt onto the SSD.
 
-When the flash is finished, shut down your Raspi via:
-```sh
-sudo shutdown -h now
-```
+Transfer the obtained image to the Raspi OS and then `VNC` into your Raspi.
 
-Then unplug your USB.
+Open the Raspberry Pi Imager and repeat the same steps where you flashed the Raspberry Pi OS, only this time, in the `Operating System` option, scroll to the bottom and click `Use custom` to select your downloaded OpenWrt image and select your SSD in the `Storage` option, no customization settings needed.
 
----
+When the flash is finished, shut down your Raspi and unplug your USB.
 
-### Set static IP address
+### 4. Set static IP address
 
 *(You may skip this step if you already configured a static IP within your custom image)*
 
@@ -116,7 +158,7 @@ config interface 'lan'
 - Finally, shut down the Raspi with the same shutdown command above and unplug your USB.
 - Boot up your Raspi again. Wait for a few minutes and access OpenWrt via your web browser using the same static IP you set above.
 
-Leave the password blank and log in to OpenWrt via the web interface, which is called `LuCI`. Don't forget to change the default password in `System > Router Password` and enable `SSH` in `System > SSH Access`.
+Leave the password blank and log in to OpenWrt via the web interface, which is called `LuCI`. Don't forget to change the default password afterward.
 
 ---
 
@@ -142,18 +184,15 @@ In some cases, you will also need to disable `DHCPv6` in your internet router as
 
 ### Optional
 
-#### Set Device Static Leases
+#### Set device static leases
 
 If you have a habit of managing your network devices like me, you can set their static leases in OpenWrt `LuCI` via `Network > DHCP and DNS > Static Leases`.
 
-You can also do it via `SSH`:
-```sh
-nano /etc/config/dhcp
-```
+The config file is located in `/etc/config/dhcp`, you can edit it either via `SSH` directly or via `SCP`.
 
 I recommend you use `SFTP` to edit and backup the `dhcp` file as I find it easier to do so.
 
-Install `SFTP` in OpenWrt:
+Install `SFTP` in OpenWrt by `SSH` into it and run:
 ```sh
 apk update
 apk add openssh-sftp-server

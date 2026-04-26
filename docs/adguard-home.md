@@ -12,7 +12,7 @@ apk update
 apk add adguardhome
 ```
 
-Then restart the service to allowed it auto boot:
+Then restart the service to allow it to auto-boot:
 ```sh
 service adguardhome enable
 service adguardhome start
