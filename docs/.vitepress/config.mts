@@ -35,6 +35,7 @@ export default defineConfig({
             link: '/docker',
             items:
               [
+                { text: 'Expands Storage For Containers', link: '/docker-expands-storage-for-containers' },
                 { text: 'Self Hosted Photo And Video Solution', link: '/self-hosted-photo-and-video-solution' }
               ]
           },
