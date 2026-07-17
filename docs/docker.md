@@ -4,11 +4,13 @@ aside: false
 
 # Docker
 
-As Docker is already installed in OpenWrt, you can find it easily in the `LuCI` menu or, if you prefer commands, simply `SSH` into OpenWrt.
+> If you use Dockerman JS, you can skip everything below.
 
-However, if you want containers to connect to each other, it won't work by default.
+Docker is already installed in OpenWrt. You can access it through the `LuCI` menu or, if you prefer commands, SSH into OpenWrt.
 
-To allow it, you have to do the following steps:
+By default, containers cannot connect to each other.
+
+To allow it, follow these steps:
 - Create a new bridge device via `Network > Interfaces > Devices`:
 ![device docker1](./assets/docker/1.png)
 - Add an unmanaged interface in `LuCI`, covering the `docker1`:

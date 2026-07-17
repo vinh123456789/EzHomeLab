@@ -6,7 +6,7 @@ This is a simplified guide based on the official [OpenWrt AdGuard Home guide](ht
 
 ## Install AdGuard Home in OpenWrt
 
-SSH into OpenWrt and type the following commands:
+`SSH` into OpenWrt and type the following commands:
 ```sh
 apk update
 apk add adguardhome
